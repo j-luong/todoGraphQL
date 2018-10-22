@@ -16,9 +16,9 @@ const TodoType = new graphQL.GraphQLObjectType({
   name: 'todo',
   description: 'a todo item',
   fields: {
-    id: {type: graphQL.GraphQLInt},
-    content: {type: graphQL.GraphQLString},
-    done: {type: graphQL.GraphQLBoolean}
+    id: { type: graphQL.GraphQLInt },
+    content: { type: graphQL.GraphQLString },
+    done: { type: graphQL.GraphQLBoolean }
   }
 })
 
@@ -33,8 +33,52 @@ const query = new graphQL.GraphQLObjectType({
           type: graphQL.GraphQLInt
         }
       },
-      resolve: (_, {id}) => {
+      resolve: (_, { id }) => {
         if (id) return [DB[id]];
+        return Object.values(DB);
+      }
+    }
+  }
+})
+
+// Todo GQL mutations and resolvers
+const mutation = new graphQL.GraphQLObjectType({
+  name: 'TodoMutation',
+  fields: {
+    createTodo: {
+      type: new graphQL.GraphQLList(TodoType),
+      args: {
+        content: {
+          type: new graphQL.GraphQLNonNull(graphQL.GraphQLString)
+        }
+      },
+      resolve: (_, { content }) => {
+        const newTodo = new Todo(content);
+        DB[newTodo.id] = newTodo;
+        return Object.values(DB);
+      }
+    },
+    completeTodo: {
+      type: new graphQL.GraphQLList(TodoType),
+      args: {
+        id: {
+          type: new graphQL.GraphQLNonNull(graphQL.GraphQLInt)
+        }
+      },
+      resolve: (_, { id }) => {
+        DB[id].done = true;
+        return Object.values(DB);
+      }
+    },
+    deleteTodo: {
+      type: new graphQL.GraphQLList(TodoType),
+      args: {
+        id: {
+          type: new graphQL.GraphQLNonNull(graphQL.GraphQLInt)
+        }
+      },
+      resolve: (_, { id }) => {
+        delete DB[id];
         return Object.values(DB);
       }
     }
@@ -43,5 +87,6 @@ const query = new graphQL.GraphQLObjectType({
 
 // create and export GQL schema
 module.exports = new graphQL.GraphQLSchema({
-  query
+  query,
+  mutation
 });
