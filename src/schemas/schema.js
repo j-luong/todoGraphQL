@@ -1,13 +1,13 @@
 const graphQL = require('graphql');
 const Todo = require('../models/todo');
-const DB = {};
+const db = require('../db/db');
 
 (() => {
   const todos = ['Finish todoGQL', 'Complete OKRs', 'Learn functional programming'];
 
-  todos.map(todo => {
+  todos.forEach(async (todo) => {
     const newTodo = new Todo(todo);
-    DB[newTodo.id] = newTodo;
+    await db.setAsync(newTodo.id.toString(), JSON.stringify(newTodo));
   });
 })();
 
@@ -33,9 +33,10 @@ const query = new graphQL.GraphQLObjectType({
           type: graphQL.GraphQLInt
         }
       },
-      resolve: (_, { id }) => {
-        if (id) return [DB[id]];
-        return Object.values(DB);
+      resolve: async (_, { id }) => {
+        const todo = await db.getAsync(JSON.stringify(id));
+        if (todo) return [JSON.parse(todo)];
+        throw new Error('Invalid ID')
       }
     }
   }
@@ -52,10 +53,14 @@ const mutation = new graphQL.GraphQLObjectType({
           type: new graphQL.GraphQLNonNull(graphQL.GraphQLString)
         }
       },
-      resolve: (_, { content }) => {
+      resolve: async (_, { content }) => {
         const newTodo = new Todo(content);
-        DB[newTodo.id] = newTodo;
-        return Object.values(DB);
+        try {
+          await db.setAsync(newTodo.id.toString(), JSON.stringify(newTodo));
+          return [newTodo];
+        } catch (err) {
+          throw new Error(err.message);
+        }
       }
     },
     completeTodo: {
@@ -65,9 +70,16 @@ const mutation = new graphQL.GraphQLObjectType({
           type: new graphQL.GraphQLNonNull(graphQL.GraphQLInt)
         }
       },
-      resolve: (_, { id }) => {
-        DB[id].done = true;
-        return Object.values(DB);
+      resolve: async (_, { id }) => {
+        try {
+          const todo = await db.getAsync(id.toString());
+          const parsedTodo = JSON.parse(todo);
+          parsedTodo.done = true;
+          await db.setAsync(id.toString(), JSON.stringify(parsedTodo));
+          return [parsedTodo];
+        } catch (err) {
+          throw new Error(err.message);
+        }
       }
     },
     deleteTodo: {
@@ -77,9 +89,13 @@ const mutation = new graphQL.GraphQLObjectType({
           type: new graphQL.GraphQLNonNull(graphQL.GraphQLInt)
         }
       },
-      resolve: (_, { id }) => {
-        delete DB[id];
-        return Object.values(DB);
+      resolve: async (_, { id }) => {
+        try {
+          await db.delAsync(id.toString());
+          return [];
+        } catch (err) {
+          throw new Error(err.message);
+        }
       }
     }
   }
