@@ -1,15 +1,18 @@
 const graphQL = require('graphql');
+const _ = require('lodash');
 const Todo = require('../models/todo');
 const db = require('../db/db');
 
 (() => {
-  const todos = ['Finish todoGQL', 'Complete OKRs', 'Learn functional programming'];
-
-  todos.forEach(async (todo) => {
-    const newTodo = new Todo(todo);
+  let count = 1;
+  _.times(1, async () => {
+    const newTodo = new Todo({id: count, body: `Todo numero ${count}` });
+    count = ++count;
     await db.setAsync(newTodo.id.toString(), JSON.stringify(newTodo));
-  });
+  })
 })();
+
+db.countItems(0).then(res => console.log(res.length));
 
 // Todo type for GQL
 const TodoType = new graphQL.GraphQLObjectType({

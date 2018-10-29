@@ -1,11 +1,9 @@
 class Todo {
   constructor(content) {
-    this.id = ++Todo.counter;
-    this.content = content;
+    this.id = content.id;
+    this.content = content.body;
     this.done = false;
   }
 }
-
-Todo.counter = 0;
 
 module.exports = Todo;
