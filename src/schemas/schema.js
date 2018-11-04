@@ -3,16 +3,18 @@ const _ = require('lodash');
 const Todo = require('../models/todo');
 const db = require('../db/db');
 
-(() => {
-  let count = 1;
-  _.times(1, async () => {
-    const newTodo = new Todo({id: count, body: `Todo numero ${count}` });
-    count = ++count;
-    await db.setAsync(newTodo.id.toString(), JSON.stringify(newTodo));
-  })
-})();
+// (() => {
+//   let count = 1;
+//   _.times(5, async () => {
+//     const newTodo = new Todo({id: count, body: `Todo numero ${count}` });
+//     count = ++count;
+//     await db.setAsync(newTodo.id.toString(), JSON.stringify(newTodo));
+//   })
+// })();
 
-db.countItems(0).then(res => console.log(res.length));
+// db.countItems(0).then(res => console.log(res.length));
+// db.listItems().then();
+db.listItems().then(console.log);
 
 // Todo type for GQL
 const TodoType = new graphQL.GraphQLObjectType({
@@ -37,7 +39,7 @@ const query = new graphQL.GraphQLObjectType({
         }
       },
       resolve: async (_, { id }) => {
-        const todo = await db.getAsync(JSON.stringify(id));
+        const todo = await db.getAsync(id);
         if (todo) return [JSON.parse(todo)];
         throw new Error('Invalid ID')
       }
