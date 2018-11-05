@@ -7,5 +7,5 @@ type Query {
 type Mutation {
   createTodo(content: String): [Todo]
   completeTodo(id: Int): [Todo]
-  deleteTodo(id: Int): [Todo]
+  deleteTodo(id: Int): Boolean
 }

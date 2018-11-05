@@ -13,12 +13,8 @@ const db = {};
 
 function getTodo(id: number): Todo[] {
   const todo = db[id];
-  if (!todo) { throw new Error(`Todo ${id} does not exist`) }
-  return [{
-    id: todo.id,
-    content: todo.content,
-    done: todo.done
-  }]
+  if (!todo) { throw new Error(`Todo ${id} does not exist`); }
+  return [todo]
 }
 
 function listTodos(): Todo[] {
@@ -35,14 +31,18 @@ function newTodo(content: string): [Todo] {
 
 function completeTodo(id: number): [Todo] {
   const todo = db[id];
+  if (!todo) { throw new Error(`Todo ${id} does not exist.`); }
   todo.done = true;
   return [todo];
 }
 
-function deleteTodo(id: number): [] {
+function deleteTodo(id: number): boolean {
   const todo = db[id];
-  if (todo) { delete db[id]; }
-  return [];
+  if (todo) {
+    delete db[id];
+    return true;
+  }
+  return false;
 }
 
 export const resolver = {
