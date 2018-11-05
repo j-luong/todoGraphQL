@@ -1,4 +1,11 @@
 type Query {
   greeting(name: String): String
   getTodo(id: Int): [Todo]
+  listTodos: [Todo]
+}
+
+type Mutation {
+  createTodo(content: String): [Todo]
+  completeTodo(id: Int): [Todo]
+  deleteTodo(id: Int): [Todo]
 }
