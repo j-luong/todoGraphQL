@@ -41,12 +41,3 @@ export class ResolverTodo {
     return false;
   }
 };
-
-export const resolver = {
-  greeting: ({ name = 'world' }) =>  `Hello ${name}`,
-  getTodo: ({ id }) =>  getTodo(id),
-  listTodos: () => listTodos(),
-  createTodo: ({ content }) => newTodo(content),
-  completeTodo: ({ id }) => completeTodo(id),
-  deleteTodo: ({ id }) => deleteTodo(id)
-};
