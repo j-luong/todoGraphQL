@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as graphql from 'express-graphql';
 import { schema } from './schemas/builder';
-import { resolver } from './resolvers/resolver';
+import { resolver } from './resolvers';
 import bodyParser = require('body-parser');
 
 const port = 3000;
