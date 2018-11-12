@@ -64,16 +64,18 @@ describe('Resolvers', () => {
   });
 
   describe('#completeTodo', () => {
+    const id = 1;
     it('completes a todo', () => {
-      resolver.completeTodo(1);
-      const todo = resolver.getTodo(1);
+      resolver.completeTodo(id);
+      const todo = resolver.getTodo(id);
       assert.equal(todo[0].done, true);
     });
 
     it('throws if todo does not exist', () => {
+      const id = -1;
       let todo;
       try {
-        resolver.completeTodo(919420148);
+        resolver.completeTodo(id);
       } catch (err) {
         todo = err;
       }
@@ -82,8 +84,9 @@ describe('Resolvers', () => {
   });
 
   xdescribe('#deleteTodo', () => {
+    const id = 1;
     it('deletes a todo', () => {
-      resolver.deleteTodo(1);
+      resolver.deleteTodo(id);
       // assert.notExists(db[0]);
     });
   });

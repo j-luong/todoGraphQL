@@ -20,7 +20,7 @@ const Resolver = new ResolverTodo(db);
 
 
 export const resolver = {
-  greeting: ({ name = 'world' }) =>  `Hello ${name}`,
+  greeting: ({ name = 'world' }) => `Hello ${name}`,
   getTodo: ({ id }) =>  Resolver.getTodo(id),
   listTodos: () => Resolver.listTodos(),
   createTodo: ({ content }) => Resolver.createTodo(content),
