@@ -18,7 +18,7 @@ export class ResolverTodo {
     return todos;
   }
   
-  newTodo(content: string): [Todo] {
+  createTodo(content: string): [Todo] {
     const id = parseInt(Object.keys(this.db).pop(), 10) + 1;
     const todo = createTodo(id, content);
     this.db[todo.id] = todo;

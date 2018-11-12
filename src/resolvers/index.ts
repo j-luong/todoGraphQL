@@ -23,7 +23,7 @@ export const resolver = {
   greeting: ({ name = 'world' }) =>  `Hello ${name}`,
   getTodo: ({ id }) =>  Resolver.getTodo(id),
   listTodos: () => Resolver.listTodos(),
-  createTodo: ({ content }) => Resolver.newTodo(content),
+  createTodo: ({ content }) => Resolver.createTodo(content),
   completeTodo: ({ id }) => Resolver.completeTodo(id),
   deleteTodo: ({ id }) => Resolver.deleteTodo(id)
 };

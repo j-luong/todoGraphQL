@@ -1,7 +1,8 @@
 import { assert } from 'chai';
-import { resolver }  from '../../src/resolvers/resolver';
+import { ResolverTodo }  from '../../src/resolvers/todoresolver';
 
 let db = {};
+let resolver;
 
 describe('Resolvers', () => {
   beforeEach(() => {
@@ -17,6 +18,7 @@ describe('Resolvers', () => {
         };
       });
     })();
+    resolver = new ResolverTodo(db);
   });
 
   afterEach(() => {
@@ -24,9 +26,9 @@ describe('Resolvers', () => {
   });
 
   describe('#getTodo', () => {
-    it('gets a todo as an array', () =>{
+    it('gets a todo as an array', () => {
       const id = 1
-      const todo = resolver.getTodo({ id });
+      const todo = resolver.getTodo(id);
 
       assert.isArray(todo);
       assert.deepEqual(todo[0], db[id]);
@@ -36,7 +38,7 @@ describe('Resolvers', () => {
       const id = -1;
       let todo;
       try {
-        todo = resolver.getTodo({ id });
+        todo = resolver.getTodo(id);
       } catch (err) {
         todo = err;
       }
@@ -56,22 +58,22 @@ describe('Resolvers', () => {
 
   describe('#createTodo', () => {
     it('creates a new todo', () => {
-      const todo = resolver.createTodo({ content: "Hello world" });
+      const todo = resolver.createTodo("Hello world");
       assert.equal(todo[0].content, "Hello world");
     });
   });
 
   describe('#completeTodo', () => {
     it('completes a todo', () => {
-      resolver.completeTodo({ id: 1 });
-      const todo = resolver.getTodo({ id: 1 });
+      resolver.completeTodo(1);
+      const todo = resolver.getTodo(1);
       assert.equal(todo[0].done, true);
     });
 
     it('throws if todo does not exist', () => {
       let todo;
       try {
-        resolver.completeTodo({ id: 919420148 });
+        resolver.completeTodo(919420148);
       } catch (err) {
         todo = err;
       }
@@ -81,7 +83,7 @@ describe('Resolvers', () => {
 
   xdescribe('#deleteTodo', () => {
     it('deletes a todo', () => {
-      resolver.deleteTodo({ id: 1 });
+      resolver.deleteTodo(1);
       // assert.notExists(db[0]);
     });
   });
