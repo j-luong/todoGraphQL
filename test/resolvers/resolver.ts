@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { ResolverTodo }  from '../../src/resolvers/todoresolver';
+import { ResolverTodo }  from '../../src/resolvers/todo';
 
 let db = {};
 let resolver;

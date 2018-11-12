@@ -1,4 +1,4 @@
-import { ResolverTodo } from './todoresolver';
+import { ResolverTodo } from './todo';
 
 const db = {};
 
