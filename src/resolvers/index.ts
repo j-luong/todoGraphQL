@@ -1,23 +1,25 @@
+import { redisDB } from '../db/redis';
+import { inMemoryDB } from '../db/inmemory';
 import { ResolverTodo } from './todo';
 
-const db = {};
+// const db = {};
 
-((): void => {
-  const todos = ['Finish todoGQL', 'Complete OKRs', 'Learn l programming'];
+// ((): void => {
+//   const todos = ['Finish todoGQL', 'Complete OKRs', 'Learn l programming'];
 
-  todos.forEach((content, index) => {
-    const id = index + 1;
-    const newTodo = {
-      id,
-      content,
-      done: false
-    };
-    db[id] = newTodo;
-  });
-})();
+//   todos.forEach((content, index) => {
+//     const id = index + 1;
+//     const newTodo = {
+//       id,
+//       content,
+//       done: false
+//     };
+//     db[id] = newTodo;
+//   });
+// })();
 
-const Resolver = new ResolverTodo(db);
-
+console.log('TCL: inMemoryDB', inMemoryDB);
+const Resolver = new ResolverTodo(inMemoryDB);
 
 export const resolver = {
   greeting: ({ name = 'world' }) => `Hello ${name}`,

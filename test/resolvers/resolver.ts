@@ -1,37 +1,25 @@
 import { assert } from 'chai';
+import { dbStub } from '../stubs/db';
 import { ResolverTodo }  from '../../src/resolvers/todo';
 
-let db = {};
 let resolver;
 
 describe('Resolvers', () => {
   beforeEach(() => {
-    ((): void => {
-      const todos = ['Finish todoGQL', 'Complete OKRs', 'Learn functional programming'];
-    
-      todos.forEach((todo, index) => {
-        const count = index + 1;
-        db[count] = {
-          id: count,
-          content: todo,
-          done: false
-        };
-      });
-    })();
-    resolver = new ResolverTodo(db);
+    resolver = new ResolverTodo(dbStub);
   });
 
   afterEach(() => {
-    db = {};
+    dbStub.resetDB();
   });
 
   describe('#getTodo', () => {
     it('gets a todo as an array', () => {
-      const id = 1
+      const id = 1;
       const todo = resolver.getTodo(id);
 
       assert.isArray(todo);
-      assert.deepEqual(todo[0], db[id]);
+      assert.hasAllKeys(todo[0], ['id', 'content', 'done'])
     });
 
     it('throws if todo does not exist', () => {
@@ -47,12 +35,28 @@ describe('Resolvers', () => {
   });
   
   describe('#listTodo', () => {
-    it('gets all todos', () =>{
+    beforeEach(() => {
+      dbStub.resetDB();
+      resolver = new ResolverTodo(dbStub);
+    });
+
+    it('gets all todos if 3 todos', () => {
       const todos = resolver.listTodos();
-      const dbTodos = Object.keys(db);
+      assert.isArray(todos);
+      assert.lengthOf(todos, 3);
+    });
+
+    it('gets all todos if 8 todos', () => {
+      resolver.createTodo({ content: "todo 1" });
+      resolver.createTodo({ content: "todo 2" });
+      resolver.createTodo({ content: "todo 3" });
+      resolver.createTodo({ content: "todo 4" });
+      resolver.createTodo({ content: "todo 5" });
+
+      const todos = resolver.listTodos();
 
       assert.isArray(todos);
-      assert.equal(todos.length, dbTodos.length);
+      assert.lengthOf(todos, 8);
     });
   });
 
@@ -83,11 +87,12 @@ describe('Resolvers', () => {
     })
   });
 
-  xdescribe('#deleteTodo', () => {
+  describe('#deleteTodo', () => {
     const id = 1;
     it('deletes a todo', () => {
       resolver.deleteTodo(id);
-      // assert.notExists(db[0]);
+      const todos = resolver.listTodos();
+      assert.notEqual(todos[0].id, 1);
     });
   });
 });
