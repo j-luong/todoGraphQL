@@ -51,8 +51,8 @@ async function listItems(): Promise<any> {
   return todos;
 }
 
-async function updateItem(id: number, content: string): Promise<Todo> {
-  return setAsync(id, content);
+async function updateItem(id: number, todo: object): Promise<Todo> {
+  return setAsync(id, JSON.stringify(todo));
 }
 
 async function deleteItem(id: number): Promise<any> {

@@ -24,7 +24,6 @@ export class ResolverTodo {
     } catch (err) {
       throw err;
     }
-		console.log("​ResolverTodo -> todos", todos)
     return todos;
   }
   
@@ -41,7 +40,14 @@ export class ResolverTodo {
   async completeTodo(id: number): Promise<Todo[]> {
     let todo;
     try {
-      todo = await this.db.updateItem(id);
+      todo = await this.db.getItem(id);
+    } catch (err) {
+      throw err;
+    }
+
+    try {
+      todo.done = true;
+      await this.db.updateItem(id, todo);
     } catch (err) {
       throw err;
     }
