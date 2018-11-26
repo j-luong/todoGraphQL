@@ -7,47 +7,48 @@ export class ResolverTodo {
     this.db = db
   }
 
-  getTodo(id: number): Todo[] {
+  async getTodo(id: number): Promise<Todo[]> {
     let todo;
     try {
-      todo = this.db.getItem(id);
+      todo = await this.db.getItem(id);
     } catch (err) {
       throw err;
     }
     return [todo]
   }
   
-  listTodos(): Todo[] {
+  async listTodos(): Promise<Todo[]> {
     let todos;
     try {
-      todos = this.db.listItems();
+      todos = await this.db.listItems();
     } catch (err) {
       throw err;
     }
+		console.log("​ResolverTodo -> todos", todos)
     return todos;
   }
   
-  createTodo(content: string): [Todo] {
+  async createTodo(content: string): Promise<Todo[]> {
     let todo;
     try {
-      todo = this.db.createItem(content);
+      todo = await this.db.createItem(content);
     } catch (err) {
       throw err;
     }
     return [todo];
   }
   
-  completeTodo(id: number): [Todo] {
+  async completeTodo(id: number): Promise<Todo[]> {
     let todo;
     try {
-      todo = this.db.updateItem(id);
+      todo = await this.db.updateItem(id);
     } catch (err) {
       throw err;
     }
     return [todo];
   }
   
-  deleteTodo(id: number): boolean {
+  async deleteTodo(id: number): Promise<boolean> {
     return this.db.deleteItem(id);
   }
 };

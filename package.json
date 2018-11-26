@@ -4,7 +4,7 @@
   "description": "Todo in GraphQL",
   "main": "dist/server.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "npm run clean && npm run build && node dist/server.js",
     "pretest": "npm run build",
     "test": "mocha",
     "build": "npm run clean && tsc",

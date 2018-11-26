@@ -21,30 +21,34 @@ async function getKeys(cursor: number, count = []): Promise<any> {
   const items = await scanAsync(cursor);
   count = count.concat(items[1]);
   
-  if (items[0] === '0') return count;
+  if (items[0] === '0') {
+    return count;
+  };
   return getKeys(parseInt(items[0], 10), count);
 }
 
 async function getItem(id: number): Promise<Todo> {
-  return getAsync(id.toString());
+  const todo = await getAsync(id.toString());
+  return JSON.parse(todo);
 };
 
 async function createItem(content: string): Promise<Todo> {
   const keys = await getKeys(0);
   const id = keys.length + 1;
   const todo = createTodo(id, content);
-  return setAsync(id.toString(), todo);
+  await setAsync(id.toString(), JSON.stringify(todo));
+  return todo;
 }
 
 async function listItems(): Promise<any> {
   const keys = await getKeys(0);
-  const res = keys.reduce(async (acc, key) => {
-    const accumulator = await acc;
-    accumulator[key] = await getAsync(key);
-    return accumulator;
-  }, {});
+  const pendingTodos = keys.map(async (key) => {
+    const todo = await getAsync(key);
+    return JSON.parse(todo);
+  });
+  const todos = await Promise.all(pendingTodos);
 
-  return res;
+  return todos;
 }
 
 async function updateItem(id: number, content: string): Promise<Todo> {
