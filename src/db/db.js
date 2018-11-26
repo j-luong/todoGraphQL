@@ -9,8 +9,6 @@ const scanAsync = promisify(client.scan).bind(client);
 
 client.on('connect', () => {
   console.log('Redis DB connected');
-  // client.flushdb();
-  // console.log('Cleaned DB');
 });
 
 client.on('error', (err) => {
