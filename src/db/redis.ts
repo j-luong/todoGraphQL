@@ -1,6 +1,7 @@
 import * as redis from 'redis';
 import { promisify } from 'util';
 import { createTodo, Todo } from '../models/todo';
+import { DB } from '../models/db';
 
 const client = redis.createClient();
 
@@ -17,7 +18,7 @@ const scanAsync = promisify(client.scan).bind(client);
 const setAsync = promisify(client.set).bind(client);
 const delAsync = promisify(client.del).bind(client);
 
-async function getKeys(cursor: number, count = []): Promise<any> {
+async function getKeys(cursor: number, count = []): Promise<number[]> {
   const items = await scanAsync(cursor);
   count = count.concat(items[1]);
   
@@ -40,7 +41,7 @@ async function createItem(content: string): Promise<Todo> {
   return todo;
 }
 
-async function listItems(): Promise<any> {
+async function listItems(): Promise<Todo[]> {
   const keys = await getKeys(0);
   const pendingTodos = keys.map(async (key) => {
     const todo = await getAsync(key);
@@ -55,11 +56,11 @@ async function updateItem(id: number, todo: object): Promise<Todo> {
   return setAsync(id, JSON.stringify(todo));
 }
 
-async function deleteItem(id: number): Promise<any> {
+async function deleteItem(id: number): Promise<boolean> {
   return delAsync(id);
 }
 
-export const redisDB = {
+export const redisDB: DB = {
   createItem: async (content) => createItem(content),
   getItem: async (id) => getItem(id),
   listItems: async () => listItems(),

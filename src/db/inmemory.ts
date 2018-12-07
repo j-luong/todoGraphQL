@@ -1,4 +1,5 @@
 import { Todo, createTodo } from '../models/todo';
+import { DB } from '../models/db';
 
 const db = {};
 
@@ -51,7 +52,7 @@ function updateItem(id: number): Todo {
   return todo;
 }
 
-export const inMemoryDB = {
+export const inMemoryDB: DB = {
   createItem: ({ content }): Todo => createItem(content),
   getItem: ({ id }): Todo => getItem(id),
   listItems: (): Todo[] => listItems(),
