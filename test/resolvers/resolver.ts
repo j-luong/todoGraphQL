@@ -14,19 +14,19 @@ describe('Resolvers', () => {
   });
 
   describe('#getTodo', () => {
-    it('gets a todo as an array', () => {
+    it('gets a todo as an array', async () => {
       const id = 1;
-      const todo = resolver.getTodo(id);
+      const todo = await resolver.getTodo(id);
 
       assert.isArray(todo);
       assert.hasAllKeys(todo[0], ['id', 'content', 'done'])
     });
 
-    it('throws if todo does not exist', () => {
+    it('throws if todo does not exist', async () => {
       const id = -1;
       let todo;
       try {
-        todo = resolver.getTodo(id);
+        todo = await resolver.getTodo(id);
       } catch (err) {
         todo = err;
       }
@@ -40,20 +40,22 @@ describe('Resolvers', () => {
       resolver = new ResolverTodo(dbStub);
     });
 
-    it('gets all todos if 3 todos', () => {
-      const todos = resolver.listTodos();
+    it('gets all todos if 3 todos', async () => {
+      const todos = await resolver.listTodos();
       assert.isArray(todos);
       assert.lengthOf(todos, 3);
     });
 
-    it('gets all todos if 8 todos', () => {
-      resolver.createTodo({ content: "todo 1" });
-      resolver.createTodo({ content: "todo 2" });
-      resolver.createTodo({ content: "todo 3" });
-      resolver.createTodo({ content: "todo 4" });
-      resolver.createTodo({ content: "todo 5" });
+    it('gets all todos if 8 todos', async () => {
+      await Promise.all([
+        resolver.createTodo({ content: "todo 1" }),
+        resolver.createTodo({ content: "todo 2" }),
+        resolver.createTodo({ content: "todo 3" }),
+        resolver.createTodo({ content: "todo 4" }),
+        resolver.createTodo({ content: "todo 5" })
+      ]);
 
-      const todos = resolver.listTodos();
+      const todos = await resolver.listTodos();
 
       assert.isArray(todos);
       assert.lengthOf(todos, 8);
@@ -61,25 +63,25 @@ describe('Resolvers', () => {
   });
 
   describe('#createTodo', () => {
-    it('creates a new todo', () => {
-      const todo = resolver.createTodo("Hello world");
+    it('creates a new todo', async () => {
+      const todo = await resolver.createTodo("Hello world");
       assert.equal(todo[0].content, "Hello world");
     });
   });
 
   describe('#completeTodo', () => {
     const id = 1;
-    it('completes a todo', () => {
-      resolver.completeTodo(id);
-      const todo = resolver.getTodo(id);
+    it('completes a todo', async () => {
+      await resolver.completeTodo(id);
+      const todo = await resolver.getTodo(id);
       assert.equal(todo[0].done, true);
     });
 
-    it('throws if todo does not exist', () => {
+    it('throws if todo does not exist', async () => {
       const id = -1;
       let todo;
       try {
-        resolver.completeTodo(id);
+        await resolver.completeTodo(id);
       } catch (err) {
         todo = err;
       }
@@ -89,9 +91,9 @@ describe('Resolvers', () => {
 
   describe('#deleteTodo', () => {
     const id = 1;
-    it('deletes a todo', () => {
-      resolver.deleteTodo(id);
-      const todos = resolver.listTodos();
+    it('deletes a todo', async () => {
+      await resolver.deleteTodo(id);
+      const todos = await resolver.listTodos();
       assert.notEqual(todos[0].id, 1);
     });
   });
