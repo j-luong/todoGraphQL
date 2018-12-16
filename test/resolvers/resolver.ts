@@ -1,6 +1,6 @@
 import { assert } from 'chai';
+import { ResolverTodo } from '../../src/resolvers/todo';
 import { dbStub } from '../stubs/db';
-import { ResolverTodo }  from '../../src/resolvers/todo';
 
 let resolver;
 
@@ -19,7 +19,7 @@ describe('Resolvers', () => {
       const todo = await resolver.getTodo(id);
 
       assert.isArray(todo);
-      assert.hasAllKeys(todo[0], ['id', 'content', 'done'])
+      assert.hasAllKeys(todo[0], ['id', 'content', 'done']);
     });
 
     it('throws if todo does not exist', async () => {
@@ -33,7 +33,7 @@ describe('Resolvers', () => {
       assert.instanceOf(todo, Error);
     });
   });
-  
+
   describe('#listTodo', () => {
     beforeEach(() => {
       dbStub.resetDB();
@@ -48,11 +48,11 @@ describe('Resolvers', () => {
 
     it('gets all todos if 8 todos', async () => {
       await Promise.all([
-        resolver.createTodo({ content: "todo 1" }),
-        resolver.createTodo({ content: "todo 2" }),
-        resolver.createTodo({ content: "todo 3" }),
-        resolver.createTodo({ content: "todo 4" }),
-        resolver.createTodo({ content: "todo 5" })
+        resolver.createTodo({ content: 'todo 1' }),
+        resolver.createTodo({ content: 'todo 2' }),
+        resolver.createTodo({ content: 'todo 3' }),
+        resolver.createTodo({ content: 'todo 4' }),
+        resolver.createTodo({ content: 'todo 5' })
       ]);
 
       const todos = await resolver.listTodos();
@@ -64,8 +64,8 @@ describe('Resolvers', () => {
 
   describe('#createTodo', () => {
     it('creates a new todo', async () => {
-      const todo = await resolver.createTodo("Hello world");
-      assert.equal(todo[0].content, "Hello world");
+      const todo = await resolver.createTodo('Hello world');
+      assert.equal(todo[0].content, 'Hello world');
     });
   });
 
@@ -78,15 +78,14 @@ describe('Resolvers', () => {
     });
 
     it('throws if todo does not exist', async () => {
-      const id = -1;
       let todo;
       try {
-        await resolver.completeTodo(id);
+        await resolver.completeTodo(-1);
       } catch (err) {
         todo = err;
       }
       assert.instanceOf(todo, Error);
-    })
+    });
   });
 
   describe('#deleteTodo', () => {

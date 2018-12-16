@@ -13,9 +13,7 @@ function buildGraphQLSchema(): any {
     return `${acc}${query}`;
   }, '');
 
-  const schema = buildSchema(graphQLSchema);
-
-  return schema;
+  return buildSchema(graphQLSchema);
 }
 
 export const schema = buildGraphQLSchema();

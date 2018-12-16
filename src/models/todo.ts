@@ -5,11 +5,9 @@ export interface Todo {
 }
 
 export function createTodo(id: number, content: string, done: boolean = false): Todo {
-  const todo: Todo = {
+  return {
     id,
     content,
     done
-  }
-
-  return todo;
+  };
 }

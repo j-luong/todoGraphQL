@@ -4,7 +4,7 @@ export class ResolverTodo {
   private db: any;
 
   constructor (db: any) {
-    this.db = db
+    this.db = db;
   }
 
   async getTodo(id: number): Promise<Todo[]> {
@@ -14,9 +14,9 @@ export class ResolverTodo {
     } catch (err) {
       throw err;
     }
-    return [todo]
+    return [todo];
   }
-  
+
   async listTodos(): Promise<Todo[]> {
     let todos;
     try {
@@ -26,7 +26,7 @@ export class ResolverTodo {
     }
     return todos;
   }
-  
+
   async createTodo(content: string): Promise<Todo[]> {
     let todo;
     try {
@@ -36,7 +36,7 @@ export class ResolverTodo {
     }
     return [todo];
   }
-  
+
   async completeTodo(id: number): Promise<Todo[]> {
     let todo;
     try {
@@ -53,8 +53,8 @@ export class ResolverTodo {
     }
     return [todo];
   }
-  
+
   async deleteTodo(id: number): Promise<boolean> {
     return this.db.deleteItem(id);
   }
-};
+}

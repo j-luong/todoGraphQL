@@ -1,4 +1,4 @@
-import { Todo, createTodo } from '../../src/models/todo';
+import { createTodo, Todo } from '../../src/models/todo';
 
 let db = {};
 
@@ -14,7 +14,7 @@ function initialise(): void {
     };
     db[id] = newTodo;
   });
-};
+}
 
 function createItem(content: string): Todo {
   const id = parseInt(Object.keys(db).pop(), 10) + 1 || 1;
@@ -33,8 +33,7 @@ function getItem(id: number): Todo {
 }
 
 function listItems(): Todo[] {
-  const todos = Object.keys(db).map(todoId => db[todoId]);
-  return todos;
+  return Object.keys(db).map(todoId => db[todoId]);
 }
 
 function deleteItem(id: number): boolean {
@@ -60,10 +59,10 @@ function resetDB(): void {
 
 initialise();
 export const dbStub = {
-  createItem: (content): Todo => createItem(content),
-  getItem: (id): Todo => getItem(id),
-  listItems: (): Todo[] => listItems(),
-  updateItem: (id): Todo => updateItem(id),
-  deleteItem: (id): boolean => deleteItem(id),
-  resetDB: (): void => resetDB()
-}
+  createItem: createItem,
+  getItem: getItem,
+  listItems: listItems,
+  updateItem: updateItem,
+  deleteItem: deleteItem,
+  resetDB: resetDB
+};

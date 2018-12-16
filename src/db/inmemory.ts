@@ -1,5 +1,5 @@
-import { Todo, createTodo } from '../models/todo';
 import { DB } from '../models/db';
+import { createTodo, Todo } from '../models/todo';
 
 const db = {};
 
@@ -19,9 +19,8 @@ const db = {};
 
 function createItem(content: string): Todo {
   const id = parseInt(Object.keys(db).pop(), 10) + 1;
-  const todo = createTodo(id, content);
 
-  return todo;
+  return createTodo(id, content);
 }
 
 function getItem(id: number): Todo {
@@ -32,8 +31,7 @@ function getItem(id: number): Todo {
 }
 
 function listItems(): Todo[] {
-  const todos = Object.keys(db).map(todoId => db[todoId]);
-  return todos;
+  return Object.keys(db).map(todoId => db[todoId]);
 }
 
 function deleteItem(id: number): boolean {
@@ -55,7 +53,7 @@ function updateItem(id: number): Todo {
 export const inMemoryDB: DB = {
   createItem: ({ content }): Todo => createItem(content),
   getItem: ({ id }): Todo => getItem(id),
-  listItems: (): Todo[] => listItems(),
+  listItems: listItems,
   updateItem: ({ id }): Todo => updateItem(id),
   deleteItem: ({ id }): boolean => deleteItem(id)
-}
+};

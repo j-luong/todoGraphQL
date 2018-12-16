@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": false,
     "moduleResolution": "node",
-    "allowJs": false
+    "allowJs": false,
+    "lib": [
+      "es7",
+      "dom",
+      "esnext.asynciterable"
+    ],
+    "noUnusedLocals": true
   },
   "include": [
     "src/**/*"

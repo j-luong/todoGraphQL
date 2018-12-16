@@ -1,8 +1,8 @@
+import bodyParser = require('body-parser');
 import * as express from 'express';
 import * as graphql from 'express-graphql';
-import { schema } from './schemas/builder';
 import { resolver } from './resolvers';
-import bodyParser = require('body-parser');
+import { schema } from './schemas/builder';
 
 const port = 3000;
 const app: express.Application = express();
@@ -18,8 +18,11 @@ app.use('/graphql', graphql({
     message: error.message,
     state: error.originalError && error.originalError.state,
     locations: error.locations,
-    path: error.path,
+    path: error.path
   })
 }));
 
-app.listen(port, () => console.log(`Listening at http://localhost:${port}/`));
+app.listen(port, (): void => {
+  // tslint:disable-next-line:no-console
+  console.log(`Listening at http://localhost:${port}/`);
+});

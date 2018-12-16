@@ -5,9 +5,9 @@ const Resolver = new ResolverTodo(redisDB);
 
 export const resolver = {
   greeting: ({ name = 'world' }) => `Hello ${name}`,
-  getTodo: ({ id }) => Resolver.getTodo(id),
-  listTodos: () => Resolver.listTodos(),
-  createTodo: ({ content }) => Resolver.createTodo(content),
-  completeTodo: ({ id }) => Resolver.completeTodo(id),
-  deleteTodo: ({ id }) => Resolver.deleteTodo(id)
+  getTodo: async ({ id }) => Resolver.getTodo(id),
+  listTodos: async () => Resolver.listTodos(),
+  createTodo: async ({ content }) => Resolver.createTodo(content),
+  completeTodo: async ({ id }) => Resolver.completeTodo(id),
+  deleteTodo: async ({ id }) => Resolver.deleteTodo(id)
 };

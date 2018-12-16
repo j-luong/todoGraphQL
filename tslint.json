@@ -60,7 +60,6 @@
     "no-empty": false,
     "newline-before-return": false,
     "array-bracket-spacing": false,
-    "no-unused-variable": true,
     "no-increment-decrement": false,
     "strict-boolean-expressions": false,
     "newline-per-chained-call": false,
